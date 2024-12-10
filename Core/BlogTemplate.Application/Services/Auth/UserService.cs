@@ -1,4 +1,5 @@
 ﻿using BlogTemplate.Application.Shared.Services.Auth;
+using BlogTemplate.Application.Shared.Services.Auth.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -39,14 +40,25 @@ namespace BlogTemplate.Application.Services.Auth
                 return tokenHandler.WriteToken(token);
             }
 
-            return null; 
+            return null;
         }
 
-        public async Task<bool> RegisterUser(string email, string password)
+        public async Task<IdentityResult> RegisterUser(RegisterDto model)
         {
-            var user = new IdentityUser { UserName = email, Email = email };
-            var result = await _userManager.CreateAsync(user, password);
-            return result.Succeeded;
+            var existingUser = await _userManager.FindByNameAsync(model.Email);
+            if (existingUser != null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "Username is already taken." });
+            }
+
+            var user = new IdentityUser
+            {
+                UserName = model.Email,
+                Email = model.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            return result;
         }
     }
 }

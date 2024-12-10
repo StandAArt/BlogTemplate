@@ -1,4 +1,5 @@
 ﻿using BlogTemplate.Application.Shared.Services.Auth;
+using BlogTemplate.Application.Shared.Services.Auth.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogTemplate.API.Controllers
@@ -16,11 +17,25 @@ namespace BlogTemplate.API.Controllers
 
             return Ok(new { Token = token });
         }
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        {
+            if (model == null)
+                return BadRequest(new { message = "Invalid data." });
+
+            var result = await _userService.RegisterUser(model);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "User registered successfully." });
+            }
+            else
+            {
+                // Return the errors if registration failed
+                return BadRequest(new { message = string.Join(", ", result.Errors.Select(e => e.Description)) });
+            }
+        }
     }
 }
 
-public class LoginDto
-{
-    public string Email { get; set; }
-    public string Password { get; set; }
-}
