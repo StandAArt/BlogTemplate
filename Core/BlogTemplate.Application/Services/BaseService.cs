@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using BlogTemplate.Application.Shared.Services.Auth.Dtos;
-using BlogTemplate.Domain.Models;
+using BlogTemplate.Application.Extensions;
 
 namespace BlogTemplate.Application.Services
 {
@@ -10,19 +9,7 @@ namespace BlogTemplate.Application.Services
 
         public BaseService()
         {
-            InitMapper();
-        }
-
-        private void InitMapper()
-        {
-            if(Mapper == null)
-            {
-                var config = new MapperConfiguration(cfg =>
-             cfg.CreateMap<RegisterDto, ApplicationUser>().ReverseMap()
-          );
-
-                Mapper = new Mapper(config);
-            }
+            Mapper = Mapper.InitMapper();
         }
     }
 }
