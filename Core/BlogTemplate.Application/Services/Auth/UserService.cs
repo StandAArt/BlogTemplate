@@ -1,5 +1,7 @@
 ﻿using BlogTemplate.Application.Shared.Services.Auth;
 using BlogTemplate.Application.Shared.Services.Auth.Dtos;
+using BlogTemplate.Shared.Constants.JwtToken;
+using BlogTemplate.Shared.Constants.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +20,7 @@ namespace BlogTemplate.Application.Services.Auth
             if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+                var key = Encoding.UTF8.GetBytes(_configuration[$"{JwtTokenConsts.Jwt}:{JwtTokenConsts.Key}"]);
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -27,9 +29,9 @@ namespace BlogTemplate.Application.Services.Auth
                         new Claim(ClaimTypes.NameIdentifier, user.Id),
                         new Claim(ClaimTypes.Email, user.Email),
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:DurationInMinutes"])),
-                    Issuer = _configuration["Jwt:Issuer"],
-                    Audience = _configuration["Jwt:Audience"],
+                    Expires = DateTime.UtcNow.AddMinutes(double.Parse(_configuration[$"{JwtTokenConsts.Jwt}:{JwtTokenConsts.DurationInMinutes}"])),
+                    Issuer = _configuration[$"{JwtTokenConsts.Jwt}:{JwtTokenConsts.Issuer}"],
+                    Audience = _configuration[$"{JwtTokenConsts.Jwt}:{JwtTokenConsts.Audience}"],
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha256Signature
@@ -48,7 +50,7 @@ namespace BlogTemplate.Application.Services.Auth
             var existingUser = await _userManager.FindByNameAsync(model.Email);
             if (existingUser != null)
             {
-                return IdentityResult.Failed(new IdentityError { Description = "Username is already taken." });
+                return IdentityResult.Failed(new IdentityError { Description = UserConsts.UserExistsError });
             }
 
             var user = new IdentityUser

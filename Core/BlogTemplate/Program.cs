@@ -1,7 +1,7 @@
 using BlogTemplate.Application.Extensions;
 using BlogTemplate.Application.Services.Auth;
-using BlogTemplate.Application.Shared.Services.Auth;
 using BlogTemplate.Infrastructure.ServiceExtensions;
+using BlogTemplate.Shared.Constants.JwtToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var jwtSettings = builder.Configuration.GetSection("Jwt");
+var jwtSettings = builder.Configuration.GetSection(JwtTokenConsts.Jwt);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,9 +29,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings["Issuer"],
-        ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+        ValidIssuer = jwtSettings[JwtTokenConsts.Issuer],
+        ValidAudience = jwtSettings[JwtTokenConsts.Audience],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings[JwtTokenConsts.Key]))
     };
 });
 

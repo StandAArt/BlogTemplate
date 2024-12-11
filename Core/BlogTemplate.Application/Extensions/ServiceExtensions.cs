@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BlogTemplate.Shared.Constants;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace BlogTemplate.Application.Extensions
@@ -8,7 +9,7 @@ namespace BlogTemplate.Application.Extensions
         public static IServiceCollection AddServicesFromAssembly(this IServiceCollection services, Assembly assembly)
         {
             var typesWithInterfaces = assembly.GetTypes()
-                .Where(type => type.IsClass && type.Name.EndsWith("Service"))
+                .Where(type => type.IsClass && type.Name.EndsWith(GlobalConsts.Service))
                 .Select(type => new
                 {
                     Implementation = type,

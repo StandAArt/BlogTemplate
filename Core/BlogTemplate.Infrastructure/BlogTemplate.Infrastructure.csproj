@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogTemplate.Domain\BlogTemplate.Domain.csproj" />
+    <ProjectReference Include="..\BlogTemplate.Shared\BlogTemplate.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using BlogTemplate.Infrastructure.Context;
+using BlogTemplate.Shared.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ namespace BlogTemplate.Infrastructure.ServiceExtensions
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
-                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                 options.UseSqlServer(configuration.GetConnectionString(GlobalConsts.DefaultConnectionString)));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
