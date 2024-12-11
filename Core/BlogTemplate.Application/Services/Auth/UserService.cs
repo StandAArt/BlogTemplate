@@ -1,5 +1,6 @@
 ﻿using BlogTemplate.Application.Shared.Services.Auth;
 using BlogTemplate.Application.Shared.Services.Auth.Dtos;
+using BlogTemplate.Domain.Models;
 using BlogTemplate.Shared.Constants.JwtToken;
 using BlogTemplate.Shared.Constants.User;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace BlogTemplate.Application.Services.Auth
 {
-    public class UserService(UserManager<IdentityUser> _userManager, IConfiguration _configuration) : IUserService
+    public class UserService(UserManager<ApplicationUser> _userManager, IConfiguration _configuration) : BaseService, IUserService
     {
         public async Task<string?> Authenticate(string email, string password)
         {
@@ -53,12 +54,7 @@ namespace BlogTemplate.Application.Services.Auth
                 return IdentityResult.Failed(new IdentityError { Description = UserConsts.UserExistsError });
             }
 
-            var user = new IdentityUser
-            {
-                UserName = model.Email,
-                Email = model.Email
-            };
-
+            var user = Mapper.Map<ApplicationUser>(model);
             var result = await _userManager.CreateAsync(user, model.Password);
             return result;
         }

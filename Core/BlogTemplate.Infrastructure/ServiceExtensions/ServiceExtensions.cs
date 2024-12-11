@@ -1,4 +1,5 @@
-﻿using BlogTemplate.Infrastructure.Context;
+﻿using BlogTemplate.Domain.Models;
+using BlogTemplate.Infrastructure.Context;
 using BlogTemplate.Shared.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace BlogTemplate.Infrastructure.ServiceExtensions
             services.AddDbContext<AppDbContext>(options =>
                  options.UseSqlServer(configuration.GetConnectionString(GlobalConsts.DefaultConnectionString)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
