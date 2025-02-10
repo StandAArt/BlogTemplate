@@ -19,7 +19,7 @@ namespace BlogTemplate.Application.Extensions
 
             foreach (var type in typesWithInterfaces)
             {
-                services.AddScoped(type.Interface, type.Implementation);
+               services.AddScoped(type.Interface, type.Implementation);
             }
 
             return services;
